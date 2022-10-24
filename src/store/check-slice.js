@@ -13,6 +13,6 @@ const checkSlice = createSlice({
 
     }
 })
-export const checkActions = checkSlice.actions
+export const checkActions = checkSlice.actions;
 
-export default checkSlice
+export default checkSlice;
