@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { checkActions } from "./store/check-slice";
 import "./App.css"
 
-
 export default function App() {
 
     const [newPage, setNewPage] = React.useState(true)
@@ -22,9 +21,8 @@ export default function App() {
 
     const dispatch = useDispatch()
 
-    // const checkAnswer = () => {
-    //     dispatch(loaderActions.loading())
-    // }
+    const Check =() => {dispatch(checkActions.check())}
+    const Uncheck = () => {dispatch(checkActions.uncheck())}
 
     function Render() {
         return (
@@ -38,10 +36,6 @@ export default function App() {
             setNewPage(prevData => !prevData)
         )
     }
-
-    const Check =() => {dispatch(checkActions.check())}
-    const Uncheck = () => {dispatch(checkActions.uncheck())}
-
 
     React.useEffect(() => {
         if (newPage === false) {
