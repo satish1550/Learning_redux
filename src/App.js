@@ -4,12 +4,14 @@ import Quiz from "./components/Quiz"
 import Loader from './components/Loader'
 import axios from "axios"
 import { useSelector, useDispatch } from "react-redux"
-import { checkActions } from "./store/check-slice";
+import { checkActions } from "./store/check-slice"
+import { newActions } from "./store/new-slice"
+// import { loaderActions } from "./store/loader-slice"
 import "./App.css"
 
 export default function App() {
 
-    const [newPage, setNewPage] = React.useState(true)
+    // const [newPage, setNewPage] = React.useState(true)
     const [question, setQuestion] = React.useState([])
     // const [showAnswer, setShowAnswer] = React.useState(false)
     const [score, setScore] = React.useState(0)
@@ -18,31 +20,39 @@ export default function App() {
     const isCheck = useSelector(state => state.check.isCheck)
     // const isUncheck = useSelector(state => state.uncheck.isCheck)
     console.log(isCheck)
+    const isNew = useSelector(state => state.new.isNew)
+    // const isLoader = useSelector(state => state.loader.isLoader)
 
     const dispatch = useDispatch()
 
     const Check =() => {dispatch(checkActions.check())}
     const Uncheck = () => {dispatch(checkActions.uncheck())}
+    const Render = () => {
+        dispatch(newActions.new())
+    }
+    const palyAgain = () => { dispatch(newActions.prev()) }
+    // const Unloader = () => {dispatch(loaderActions.unloder())}
 
-    function Render() {
+    function reLoading() {
         return (
-            setNewPage(prevPage => !prevPage),
             setLoading(true)
         )
     }
 
-    const palyAgain = () => {
-        return (
-            setNewPage(prevData => !prevData)
-        )
-    }
+    // const palyAgain = () => {
+    //     return (
+    //         setNewPage(prevData => !prevData)
+    //     )
+    // }
 
     React.useEffect(() => {
-        if (newPage === false) {
+        if (isNew === false) {
             axios.get("https://opentdb.com/api.php?amount=5&type=multiple")
                 .then(res => setQuestion(res.data.results.map((question) => {
 
                     setLoading(prevState => !prevState)
+                    // dispatch(loaderActions.unloder())
+                    // Unloader();
 
                     return ({
                         question: question.question,
@@ -51,7 +61,7 @@ export default function App() {
                     })
                 })))
         }
-    }, [newPage])
+    }, [isNew])
 
     React.useEffect(() => {
         let count = 0;
@@ -91,7 +101,7 @@ export default function App() {
 
     return (
         <div className="App">
-            {newPage ? <Main Render={Render} /> :
+            {isNew ? <Main Render={() => { Render(); reLoading();}} /> :
                 loading ? <Loader /> :
                     <div>
                         {Questions}
